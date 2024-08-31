@@ -4,19 +4,22 @@ using Minimal.Entidades;
 
 namespace Minimal.Infraestrutura.Db;
 public class DbContexto : DbContext{
-    private readonly IConfiguration _configurationAppSettings;
-    public DbContexto(IConfiguration configurationAppSettings)
+    public DbContexto(DbContextOptions<DbContexto> options) : base(options)
     {
-        _configurationAppSettings = configurationAppSettings;
+
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        var conexaoString = _configurationAppSettings.GetConnectionString("mysql");
-        optionsBuilder.UseMySql(
-            "Server=localhost;Port=3306;Database=minimal_api;Uid=root;Pwd=example;",
-            ServerVersion.AutoDetect("Server=localhost;Port=3306;Database=minimal_api;Uid=root;Pwd=example;")
+        modelBuilder.Entity<Administrador>().HasData(
+            new Administrador {
+                Id = 1,
+                Email = "administrador@teste.com",
+                Senha = "123456",
+                Perfil = "Adm"
+            }
         );
     }
     public DbSet<Administrador> Administradores {get; set;} = default!;
+    public DbSet<Veiculo> Veiculos {get; set;} = default!;
 }

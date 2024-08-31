@@ -1,9 +1,15 @@
 services:
-
   db:
-    image: mysql
+    image: postgres
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: example
+      - POSTGRES_PASSWORD=example
+      - POSTGRES_USER=example
     ports:
-      - 3306:33060
+      - 5433:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
