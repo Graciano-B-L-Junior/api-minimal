@@ -17,5 +17,4 @@ public class Administrador
     public string Senha { get; set; } = default!;
     [StringLength(10)]
     public string Perfil { get; set; } = default!;
-
 }

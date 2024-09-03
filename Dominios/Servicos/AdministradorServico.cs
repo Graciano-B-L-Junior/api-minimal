@@ -11,9 +11,33 @@ public class AdministradorServico : IAdministradorServico
     public AdministradorServico(DbContexto contexto){
         _contexto = contexto;
     }
-    public Boolean Login(LoginDTO loginDTO)
+
+    public Administrador? BuscarPorId(int Id)
     {
-        var adm = _contexto.Administradores.Where<Administrador>( a => a.Email == loginDTO.Email && a.Senha == loginDTO.Senha).Count();
-        return adm > 0;
+        var adm =_contexto.Administradores.Find(Id);
+        return adm;
+    }
+
+    public Administrador IncluirAdministrador(Administrador administrador)
+    {
+        _contexto.Administradores.Add(administrador);
+        _contexto.SaveChanges();
+        return administrador;
+    }
+
+    public Administrador Login(LoginDTO loginDTO)
+    {
+        var adm = _contexto.Administradores.Where<Administrador>( a => a.Email == loginDTO.Email && a.Senha == loginDTO.Senha).First();
+        return adm;
+    }
+
+    public List<Administrador> Todos(int? pagina)
+    {
+        int itensPorPagina = 10;
+        var query = _contexto.Administradores;
+        List<Administrador> result = new List<Administrador>();
+
+        result = query.Where(v => v.Email.Contains("")).Skip(((int)pagina - 1) * itensPorPagina).Take(itensPorPagina).ToList()!;
+        return result;
     }
 }
